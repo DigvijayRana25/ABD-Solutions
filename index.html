@@ -3,454 +3,916 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ABD Solutions LLC</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<title>ABD Solutions LLC — Offshore Logistics Operations</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ─── TOKENS ─────────────────────────────────────────── */
+:root {
+  --navy:    #08101e;
+  --navy2:   #0d1a2d;
+  --navy3:   #152237;
+  --amber:   #f59e0b;
+  --amber2:  #fbbf24;
+  --white:   #f8fafc;
+  --muted:   #94a3b8;
+  --border:  rgba(255,255,255,0.07);
+  --card-bg: rgba(255,255,255,0.04);
+  --radius:  10px;
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+  --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
 }
+
+/* ─── RESET ──────────────────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background: #f5f7fb;
+  font-family: var(--font-body);
+  background: var(--navy);
+  color: var(--white);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-/* ── NAVBAR ── */
+/* ─── NOISE OVERLAY ──────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ─── NAVBAR ─────────────────────────────────────────── */
 .nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 40px;          /* removed top/bottom padding — use height instead */
-  height: 72px;             /* FIX: consistent nav height */
-  background: #fff;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 200;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  background: rgba(8,16,30,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
 }
 
 .logo img {
-  height: 69px;             /* FIX: was 120px — absurdly large, broke nav layout */
+  height: 48px;
   display: block;
+  object-fit: contain;
 }
 
-/* NAV LINKS */
+.nav-links {
+  display: flex;
+  gap: 8px;
+}
+
 .nav-links a {
-  margin: 0 15px;
   text-decoration: none;
-  color: #333;
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 14px;
   font-weight: 500;
-  position: relative;
-  transition: color 0.3s;
+  letter-spacing: 0.02em;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: color var(--transition), background var(--transition);
 }
 
 .nav-links a:hover {
-  color: #2563eb;
+  color: var(--white);
+  background: var(--card-bg);
 }
 
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background: #2563eb;
-  transition: width 0.3s;   /* FIX: was shorthand `0.3s` — be explicit */
-}
-
-.nav-links a:hover::after {
-  width: 100%;
-}
-
-/* BUTTON */
 .btn {
-  background: #2563eb;
-  color: white;
-  padding: 10px 18px;
-  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--amber);
+  color: var(--navy);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 9px 20px;
+  border-radius: var(--radius);
   text-decoration: none;
-  transition: background 0.3s;
-  white-space: nowrap;      /* FIX: prevent button text from wrapping */
+  white-space: nowrap;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
 }
 
 .btn:hover {
-  background: #1e40af;
+  background: var(--amber2);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(245,158,11,0.35);
 }
 
-/* ── HERO ── */
+/* ─── HERO ───────────────────────────────────────────── */
 .hero {
   position: relative;
-  background: url('main.png') center / cover no-repeat;
-  min-height: 480px;        /* FIX: was missing — hero would collapse without enough text */
+  min-height: 92vh;
   display: flex;
   align-items: center;
-  padding: 80px 40px;
-  color: white;
+  padding: 100px 48px 80px;
+  overflow: hidden;
 }
 
-.hero::before {
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url('main.png') center / cover no-repeat;
+  transform: scale(1.04);
+  transition: transform 8s ease;
+}
+
+.hero:hover .hero-bg { transform: scale(1); }
+
+.hero-bg::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background:
+    linear-gradient(105deg, rgba(8,16,30,0.92) 45%, rgba(8,16,30,0.5) 100%),
+    linear-gradient(to top, rgba(8,16,30,0.7) 0%, transparent 50%);
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 18%;
+  width: 4px;
+  height: 200px;
+  background: var(--amber);
+  border-radius: 0 4px 4px 0;
 }
 
 .hero-content {
-  position: relative;       /* sits above ::before overlay */
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;                /* FIX: replaced margin-top hacks with gap */
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 20px;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--amber);
 }
 
 .hero h1 {
-  font-size: 48px;
-  line-height: 1.15;
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  animation: fadeUp 0.8s ease both;
 }
 
-.hero p {
-  font-size: 18px;
-  opacity: 0.9;
+.hero h1 span { color: var(--amber); }
+
+.hero-sub {
+  margin-top: 20px;
+  font-size: 17px;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 500px;
+  animation: fadeUp 0.8s 0.15s ease both;
 }
 
-/* ── SERVICE CARDS ── */
-.services {
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 9px 20px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.btn-ghost:hover {
+  border-color: rgba(255,255,255,0.2);
+  background: var(--card-bg);
+}
+
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  animation: fadeUp 0.8s 0.45s ease both;
+}
+
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+  letter-spacing: 0.04em;
+}
+
+/* ─── TRUST STRIP ────────────────────────────────────── */
+.trust {
+  background: var(--navy2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.trust-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--amber);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ─── SHARED SECTION LABEL ───────────────────────────── */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 14px;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: var(--amber);
+}
+
+/* ─── SERVICES ───────────────────────────────────────── */
+.services-section {
+  padding: 80px 48px;
+}
+
+.services-header {
+  margin-bottom: 40px;
+}
+
+.services-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.services-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  padding: 40px;
-  margin-top: -60px;        /* pulls cards up over hero bottom edge */
-  position: relative;       /* FIX: needed so z-index stacking works vs hero */
-  z-index: 1;
+  gap: 16px;
 }
 
 .card {
   position: relative;
-  height: 200px;
+  height: 260px;
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* FIX: was missing — hover jump had no transition */
+  border: 1px solid var(--border);
+  transition: transform var(--transition), box-shadow var(--transition);
 }
 
-/* IMAGE — FULL COVER */
 .card img {
-  width: 100%;              /* FIX: was overridden to 60px at bottom of file — removed duplicate rule */
+  width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s ease;
+  transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+  filter: brightness(0.7) saturate(0.8);
 }
 
-/* DARK OVERLAY — sits above image */
 .card::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.45);
-  z-index: 1;               /* FIX: explicit z-index — was relying on source order */
+  background: linear-gradient(to top, rgba(8,16,30,0.92) 0%, rgba(8,16,30,0.3) 60%, transparent 100%);
+  z-index: 1;
 }
 
-/* TEXT — sits above overlay */
 .card-content {
   position: absolute;
-  bottom: 15px;
-  left: 15px;
-  color: white;
-  z-index: 2;               /* FIX: must be higher than ::after (z-index:1) */
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  z-index: 2;
 }
 
 .card-content h3 {
-  font-size: 16px;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.01em;
 }
 
 .card-content p {
   font-size: 13px;
-  opacity: 0.85;
-  margin-top: 2px;
+  color: var(--muted);
+  margin-top: 4px;
+  line-height: 1.5;
 }
 
-/* HOVER EFFECTS */
-.card:hover img {
-  transform: scale(1.08);
+.card::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--amber);
+  z-index: 3;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
 }
 
+.card:hover::before { transform: scaleX(1); }
+.card:hover img { transform: scale(1.06); filter: brightness(0.8) saturate(1); }
 .card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
 
-/* ── ABOUT ── */
+/* ─── ABOUT ──────────────────────────────────────────── */
 .about {
-  display: flex;
-  gap: 40px;
-  padding: 60px 40px;
-  align-items: center;      /* FIX: vertically center image & text */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--navy2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
-.about img {
-  width: 50%;
-  flex-shrink: 0;           /* FIX: was missing — image would shrink below 50% */
-  border-radius: 10px;
-  object-fit: cover;        /* FIX: ensure image doesn't distort */
-  max-height: 380px;
+.about-image {
+  position: relative;
+  overflow: hidden;
+  min-height: 460px;
+}
+
+.about-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.75) saturate(0.7);
+  transition: transform 0.6s ease, filter 0.6s ease;
+}
+
+.about:hover .about-image img {
+  transform: scale(1.03);
+  filter: brightness(0.85) saturate(0.9);
+}
+
+.about-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent 70%, var(--navy2) 100%);
 }
 
 .about-text {
-  flex: 1;
+  padding: 64px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .about-text h2 {
-  font-size: 28px;
-  line-height: 1.3;
+  font-family: var(--font-display);
+  font-size: clamp(26px, 2.5vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 16px;
 }
 
 .about-text p {
-  margin-top: 12px;
-  color: #555;
-  line-height: 1.7;
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 15px;
+  margin-bottom: 12px;
 }
 
-/* ── PROCESS ── */
+.about-bullets {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.about-bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.about-bullet-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--amber);
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+/* ─── PROCESS ────────────────────────────────────────── */
 .process {
-  text-align: center;
-  padding: 60px 40px;
-  background: #fff;         /* FIX: give section its own background so it reads clearly */
+  padding: 80px 48px;
+  background: var(--navy);
 }
 
-.process h2 {
-  font-size: 28px;
-  margin-bottom: 30px;
+.process-header {
+  margin-bottom: 48px;
+}
+
+.process-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .steps {
-  display: flex;
-  justify-content: center;
-  gap: 20px;                /* FIX: replaced space-between (leaves giant gaps) with gap */
-  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .step {
-  width: 22%;
-  min-width: 180px;         /* increased: cards now have description text */
-  background: #f5f7fb;
-  padding: 28px 20px;
-  border-radius: 10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  font-weight: 500;
-  color: #333;
-  text-align: left;         /* descriptions read better left-aligned */
+  background: var(--navy2);
+  padding: 36px 28px;
+  position: relative;
+  transition: background var(--transition);
 }
 
-.step:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+.step:hover { background: var(--navy3); }
+
+.step:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  right: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--amber);
+  font-size: 18px;
+  z-index: 2;
+  opacity: 0.5;
 }
 
 .step-number {
-  font-size: 28px;
-  color: #2563eb;
-  font-weight: 700;
-  margin-bottom: 8px;
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 800;
+  color: rgba(245,158,11,0.15);
+  line-height: 1;
+  margin-bottom: 16px;
+  transition: color var(--transition);
 }
 
+.step:hover .step-number { color: rgba(245,158,11,0.35); }
+
 .step-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 8px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
 }
 
 .step-desc {
-  font-size: 13px;
-  color: #64748b;
-  line-height: 1.6;
-  font-weight: 400;
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.7;
 }
 
-/* ── FOOTER ── */
-.footer {
-  background: #0f172a;
-  color: #94a3b8;
-  padding: 30px 40px;
+.step::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--amber);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+}
+
+.step:hover::before { transform: scaleX(1); }
+
+/* ─── CTA ────────────────────────────────────────────── */
+.cta {
+  position: relative;
+  background: var(--amber);
+  padding: 72px 48px;
+  overflow: hidden;
   text-align: center;
-  font-size: 14px;
-  letter-spacing: 0.02em;
 }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 1024px) {
-  .services {
-    grid-template-columns: repeat(2, 1fr);
-    margin-top: 0;          /* FIX: negative margin overlap looks bad at 2-col */
-  }
+.cta::before {
+  content: '';
+  position: absolute;
+  right: -80px;
+  top: -80px;
+  width: 300px;
+  height: 300px;
+  border: 60px solid rgba(0,0,0,0.06);
+  border-radius: 50%;
 }
 
-@media (max-width: 768px) {
-  .nav {
-    padding: 0 20px;
-  }
+.cta::after {
+  content: '';
+  position: absolute;
+  left: -40px;
+  bottom: -60px;
+  width: 200px;
+  height: 200px;
+  border: 40px solid rgba(0,0,0,0.04);
+  border-radius: 50%;
+}
 
-  .nav-links {
-    display: none;          /* FIX: links overflow on mobile — hide for now */
-  }
+.cta-inner {
+  position: relative;
+  z-index: 1;
+}
 
-  .hero h1 {
-    font-size: 32px;
-  }
+.cta h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
 
-  .services {
-    grid-template-columns: 1fr 1fr;
-    padding: 20px;
-    gap: 12px;
-  }
+.cta p {
+  margin-top: 12px;
+  font-size: 16px;
+  color: rgba(8,16,30,0.65);
+}
 
-  .about {
-    flex-direction: column;
-    padding: 40px 20px;
-  }
+.btn-dark {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 28px;
+  background: var(--navy);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px 28px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+}
 
-  .about img {
-    width: 100%;
-    max-height: 240px;
-  }
+.btn-dark:hover {
+  background: var(--navy2);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
 
-  .steps {
-    flex-direction: column;
-    align-items: center;
-  }
+/* ─── FOOTER ─────────────────────────────────────────── */
+.footer {
+  background: var(--navy);
+  border-top: 1px solid var(--border);
+  padding: 36px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
 
-  .step {
-    width: 100%;
-    max-width: 360px;
-  }
+.footer-left {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.footer-right a {
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.footer-right a:hover { color: var(--amber); }
+
+/* ─── ANIMATIONS ─────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .step:nth-child(2)::after { display: none; }
+}
+
+@media (max-width: 900px) {
+  .about { grid-template-columns: 1fr; }
+  .about-image { min-height: 280px; }
+  .about-image::after { background: linear-gradient(to top, var(--navy2) 0%, transparent 60%); }
+  .about-text { padding: 40px 32px; }
+}
+
+@media (max-width: 720px) {
+  .nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 80px 24px 60px; min-height: 80vh; }
+  .hero::after { display: none; }
+  .hero-stats { gap: 24px; flex-wrap: wrap; }
+  .trust { padding: 14px 24px; gap: 20px; }
+  .services-section { padding: 60px 24px; }
+  .services-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .process { padding: 60px 24px; }
+  .steps { grid-template-columns: 1fr; border-radius: 10px; }
+  .step::after { display: none !important; }
+  .cta { padding: 56px 24px; }
+  .footer { padding: 28px 24px; }
 }
 
 @media (max-width: 480px) {
-  .services {
-    grid-template-columns: 1fr;
-  }
-
-  .hero {
-    padding: 60px 20px;
-  }
-
-  .process {
-    padding: 40px 20px;
-  }
+  .services-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 32px; }
 }
 </style>
 </head>
-
 <body>
 
 <!-- NAV -->
-<div class="nav">
+<nav class="nav">
   <div class="logo">
-    <img src="logo.png" alt="ABD Solutions Logo">
+    <img src="logo.png" alt="ABD Solutions LLC">
   </div>
-
   <div class="nav-links">
     <a href="#">Home</a>
-    <a href="#">Services</a>
-    <a href="#">How It Works</a>
-    <a href="#">Contact</a>
+    <a href="#services">Services</a>
+    <a href="#process">How It Works</a>
   </div>
-
-  <a href="mailto:hello@abdsolutionsllc.com" class="btn">Get in Touch</a>
-</div>
+  <a href="mailto:hello@abdsolutionsllc.com" class="btn">Contact Us →</a>
+</nav>
 
 <!-- HERO -->
-<div class="hero">
+<section class="hero">
+  <div class="hero-bg"></div>
   <div class="hero-content">
-    <h1>Offshore Operations Support for Logistics Companies</h1>
-    <p>We handle the backend. You focus on growing your business.</p>
-    <a href="mailto:hello@abdsolutionsllc.com" class="btn" style="align-self:flex-start;">Contact Us</a>
+    <div class="hero-eyebrow">Offshore Operations Support</div>
+    <h1>Reduce Dispatch Workload.<br><span>Scale Logistics</span> Efficiently.</h1>
+    <p class="hero-sub">We handle tracking, driver coordination, and backend operations — so your team can focus entirely on growth.</p>
+    <div class="hero-actions">
+      <a href="#" onclick="openModal()" class="btn">Get Started →</a>
+      <a href="#process" class="btn-ghost">See How It Works</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">24/7</div>
+        <div class="stat-label">Operations Coverage</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">48hr</div>
+        <div class="stat-label">Pilot Onboarding</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">1–2</div>
+        <div class="stat-label">Pilot Team Members</div>
+      </div>
+    </div>
   </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust">
+  <div class="trust-item"><span class="trust-dot"></span>Dedicated Offshore Resources</div>
+  <div class="trust-item"><span class="trust-dot"></span>No Long-Term Commitment on Pilot</div>
+  <div class="trust-item"><span class="trust-dot"></span>Scalable on Demand</div>
+  <div class="trust-item"><span class="trust-dot"></span>Logistics-Specialized Team</div>
 </div>
 
 <!-- SERVICES -->
-<div class="services">
-
-  <div class="card">
-    <img src="loadtracking.png" alt="Load Tracking">
-    <div class="card-content">
-      <h3>Load Tracking</h3>
-      <p>Real-time updates</p>
+<section id="services" class="services-section">
+  <div class="services-header">
+    <div class="section-label">What We Handle</div>
+    <h2>Core Operations Services</h2>
+  </div>
+  <div class="services-grid">
+    <div class="card">
+      <img src="loadtracking.png" alt="Load Tracking">
+      <div class="card-content">
+        <h3>Load Tracking</h3>
+        <p>Real-time load tracking &amp; status updates</p>
+      </div>
+    </div>
+    <div class="card">
+      <img src="driver.png" alt="Driver Coordination">
+      <div class="card-content">
+        <h3>Driver Coordination</h3>
+        <p>Driver follow-ups &amp; communication management</p>
+      </div>
+    </div>
+    <div class="card">
+      <img src="eta.png" alt="ETA Updates">
+      <div class="card-content">
+        <h3>ETA Updates</h3>
+        <p>Accurate ETA tracking &amp; proactive client updates</p>
+      </div>
+    </div>
+    <div class="card">
+      <img src="docs.png" alt="Documentation">
+      <div class="card-content">
+        <h3>Documentation</h3>
+        <p>POD, invoices &amp; documentation handling</p>
+      </div>
     </div>
   </div>
-
-  <div class="card">
-    <img src="driver.png" alt="Driver Coordination">
-    <div class="card-content">
-      <h3>Driver Coordination</h3>
-      <p>Check calls &amp; support</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="eta.png" alt="ETA Updates">
-    <div class="card-content">
-      <h3>ETA Updates</h3>
-      <p>Accurate delivery tracking</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="docs.png" alt="Documentation">
-    <div class="card-content">
-      <h3>Documentation</h3>
-      <p>Paperwork handled</p>
-    </div>
-  </div>
-
-</div>
+</section>
 
 <!-- ABOUT -->
-<div class="about">
-  <img src="teamworking.png" alt="Team working">
-  <div class="about-text">
-    <h2>Your Offshore Operations Partner</h2>
-    <p>ABD Solutions helps logistics companies reduce operational workload and scale efficiently through offshore support.</p>
+<section class="about">
+  <div class="about-image">
+    <img src="teamworking.png" alt="ABD Solutions Team">
   </div>
-</div>
+  <div class="about-text">
+    <div class="section-label">Who We Are</div>
+    <h2>Your Offshore Operations Partner</h2>
+    <p>ABD Solutions helps logistics companies eliminate operational bottlenecks and scale efficiently — without the overhead of expanding in-house headcount.</p>
+    <p>Our team integrates directly into your workflow, acting as a seamless extension of your operations department.</p>
+    <div class="about-bullets">
+      <div class="about-bullet">
+        <div class="about-bullet-dot"></div>
+        Logistics-specialized offshore staff
+      </div>
+      <div class="about-bullet">
+        <div class="about-bullet-dot"></div>
+        Fast onboarding — operational within 48 hours
+      </div>
+      <div class="about-bullet">
+        <div class="about-bullet-dot"></div>
+        Scale up or down based on your load volume
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- PROCESS -->
-<div class="process">
-  <h2>How It Works</h2>
+<section id="process" class="process">
+  <div class="process-header">
+    <div class="section-label">The Process</div>
+    <h2>How It Works</h2>
+  </div>
   <div class="steps">
     <div class="step">
       <div class="step-number">01</div>
       <div class="step-title">Discovery</div>
-      <div class="step-desc">We learn about your operations, pain points, and workflow to identify exactly where offshore support will have the biggest impact.</div>
+      <div class="step-desc">We learn your operations, pain points, and workflow to identify exactly where offshore support will have the biggest impact on your team.</div>
     </div>
     <div class="step">
       <div class="step-number">02</div>
       <div class="step-title">Pilot</div>
-      <div class="step-desc">We assign 1–2 dedicated employees to your team. Try us out, see the quality of work firsthand, and evaluate the fit — no long-term commitment required.</div>
+      <div class="step-desc">We assign 1–2 dedicated employees to your team. Try us out, evaluate the quality of work firsthand — no long-term commitment required to get started.</div>
     </div>
     <div class="step">
       <div class="step-number">03</div>
       <div class="step-title">Scale</div>
-      <div class="step-desc">Happy with the results? We expand your offshore team to match your growing workload — quickly and without the overhead of traditional hiring.</div>
+      <div class="step-desc">Happy with the results? We expand your offshore team to match your growing workload — quickly and without the cost of traditional in-house hiring.</div>
     </div>
     <div class="step">
       <div class="step-number">04</div>
       <div class="step-title">Grow</div>
-      <div class="step-desc">With backend operations fully handled, your core team is freed up to focus on winning new business and scaling your company.</div>
+      <div class="step-desc">With backend operations fully handled, your core team is freed to focus on winning new business, building relationships, and scaling revenue.</div>
     </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-inner">
+    <h2>Start with a Low-Risk Pilot</h2>
+    <p>1–2 dedicated offshore staff. No long-term contract. Real results in days.</p>
+    <a href="#" onclick="openModal()" class="btn-dark">Get Started Today →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-left">© 2026 ABD Solutions LLC. All rights reserved.</div>
+  <div class="footer-right"><a href="mailto:hello@abdsolutionsllc.com">hello@abdsolutionsllc.com</a></div>
+</footer>
+<!-- LEAD FORM MODAL -->
+<div id="leadModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:999; align-items:center; justify-content:center;">
+  
+  <div style="background:white; color:black; padding:30px; border-radius:10px; width:90%; max-width:420px;">
+
+    <h2 style="margin-bottom:15px;">Start Your Pilot</h2>
+
+    <form action="https://formspree.io/f/mrervbvb" method="POST">
+
+      <input type="text" name="name" placeholder="Your Name" required style="width:100%;margin-bottom:10px;padding:10px;">
+      
+      <input type="text" name="company" placeholder="Company Name" required style="width:100%;margin-bottom:10px;padding:10px;">
+      
+      <input type="email" name="email" placeholder="Email Address" required style="width:100%;margin-bottom:10px;padding:10px;">
+      
+      <input type="text" name="phone" placeholder="Phone Number" style="width:100%;margin-bottom:10px;padding:10px;">
+
+      <input type="text" name="address" placeholder="Address" style="width:100%;margin-bottom:10px;padding:10px;">
+      
+      <textarea name="message" placeholder="Tell us about your operations" style="width:100%;margin-bottom:10px;padding:10px;"></textarea>
+
+      <button type="submit" style="width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:6px;">
+        Submit
+      </button>
+
+    </form>
+
+    <button onclick="closeModal()" style="margin-top:10px;">Cancel</button>
+
   </div>
 </div>
 
-<!-- FOOTER -->
-<div class="footer">
-  © 2026 ABD Solutions LLC &nbsp;|&nbsp; hello@abdsolutionsllc.com
-</div>
+<script>
+function openModal() {
+  document.getElementById("leadModal").style.display = "flex";
+}
 
+function closeModal() {
+  document.getElementById("leadModal").style.display = "none";
+}
+</script>
 </body>
 </html>
