@@ -1,97 +1,456 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ABD Solutions | Offshore Logistics Support</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f9fafb;
-      color: #111827;
-    }
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 40px 20px;
-    }
-    h1 {
-      font-size: 40px;
-      margin-bottom: 10px;
-    }
-    h2 {
-      margin-top: 40px;
-      font-size: 24px;
-    }
-    p {
-      color: #4b5563;
-      line-height: 1.6;
-    }
-    .hero {
-      text-align: center;
-      padding: 80px 20px;
-      background: white;
-      border-bottom: 1px solid #e5e7eb;
-    }
-    .btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 12px 24px;
-      background: #2563eb;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-    }
-    .card {
-      background: white;
-      padding: 20px;
-      margin-top: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABD Solutions LLC</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f5f7fb;
+}
+
+/* ── NAVBAR ── */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;          /* removed top/bottom padding — use height instead */
+  height: 72px;             /* FIX: consistent nav height */
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo img {
+  height: 69px;             /* FIX: was 120px — absurdly large, broke nav layout */
+  display: block;
+}
+
+/* NAV LINKS */
+.nav-links a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #2563eb;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: #2563eb;
+  transition: width 0.3s;   /* FIX: was shorthand `0.3s` — be explicit */
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* BUTTON */
+.btn {
+  background: #2563eb;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.3s;
+  white-space: nowrap;      /* FIX: prevent button text from wrapping */
+}
+
+.btn:hover {
+  background: #1e40af;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  background: url('main.png') center / cover no-repeat;
+  min-height: 480px;        /* FIX: was missing — hero would collapse without enough text */
+  display: flex;
+  align-items: center;
+  padding: 80px 40px;
+  color: white;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+}
+
+.hero-content {
+  position: relative;       /* sits above ::before overlay */
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;                /* FIX: replaced margin-top hacks with gap */
+}
+
+.hero h1 {
+  font-size: 48px;
+  line-height: 1.15;
+}
+
+.hero p {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+/* ── SERVICE CARDS ── */
+.services {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 40px;
+  margin-top: -60px;        /* pulls cards up over hero bottom edge */
+  position: relative;       /* FIX: needed so z-index stacking works vs hero */
+  z-index: 1;
+}
+
+.card {
+  position: relative;
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* FIX: was missing — hover jump had no transition */
+}
+
+/* IMAGE — FULL COVER */
+.card img {
+  width: 100%;              /* FIX: was overridden to 60px at bottom of file — removed duplicate rule */
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+/* DARK OVERLAY — sits above image */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1;               /* FIX: explicit z-index — was relying on source order */
+}
+
+/* TEXT — sits above overlay */
+.card-content {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  color: white;
+  z-index: 2;               /* FIX: must be higher than ::after (z-index:1) */
+}
+
+.card-content h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.card-content p {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+/* HOVER EFFECTS */
+.card:hover img {
+  transform: scale(1.08);
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+/* ── ABOUT ── */
+.about {
+  display: flex;
+  gap: 40px;
+  padding: 60px 40px;
+  align-items: center;      /* FIX: vertically center image & text */
+}
+
+.about img {
+  width: 50%;
+  flex-shrink: 0;           /* FIX: was missing — image would shrink below 50% */
+  border-radius: 10px;
+  object-fit: cover;        /* FIX: ensure image doesn't distort */
+  max-height: 380px;
+}
+
+.about-text {
+  flex: 1;
+}
+
+.about-text h2 {
+  font-size: 28px;
+  line-height: 1.3;
+}
+
+.about-text p {
+  margin-top: 12px;
+  color: #555;
+  line-height: 1.7;
+}
+
+/* ── PROCESS ── */
+.process {
+  text-align: center;
+  padding: 60px 40px;
+  background: #fff;         /* FIX: give section its own background so it reads clearly */
+}
+
+.process h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+.steps {
+  display: flex;
+  justify-content: center;
+  gap: 20px;                /* FIX: replaced space-between (leaves giant gaps) with gap */
+  margin-top: 30px;
+}
+
+.step {
+  width: 22%;
+  min-width: 180px;         /* increased: cards now have description text */
+  background: #f5f7fb;
+  padding: 28px 20px;
+  border-radius: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-weight: 500;
+  color: #333;
+  text-align: left;         /* descriptions read better left-aligned */
+}
+
+.step:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.step-number {
+  font-size: 28px;
+  color: #2563eb;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.step-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.step-desc {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* ── FOOTER ── */
+.footer {
+  background: #0f172a;
+  color: #94a3b8;
+  padding: 30px 40px;
+  text-align: center;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .services {
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 0;          /* FIX: negative margin overlap looks bad at 2-col */
+  }
+}
+
+@media (max-width: 768px) {
+  .nav {
+    padding: 0 20px;
+  }
+
+  .nav-links {
+    display: none;          /* FIX: links overflow on mobile — hide for now */
+  }
+
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  .services {
+    grid-template-columns: 1fr 1fr;
+    padding: 20px;
+    gap: 12px;
+  }
+
+  .about {
+    flex-direction: column;
+    padding: 40px 20px;
+  }
+
+  .about img {
+    width: 100%;
+    max-height: 240px;
+  }
+
+  .steps {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .step {
+    width: 100%;
+    max-width: 360px;
+  }
+}
+
+@media (max-width: 480px) {
+  .services {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding: 60px 20px;
+  }
+
+  .process {
+    padding: 40px 20px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <div class="hero">
-    <div class="container">
-      <h1>Offshore Operations Support for US Logistics Companies</h1>
-      <p>Reduce dispatch workload. Improve efficiency. Scale faster.</p>
-      <a href="mailto:hello@abdsolutionsllc.com" class="btn">Contact Us</a>
+<!-- NAV -->
+<div class="nav">
+  <div class="logo">
+    <img src="logo.png" alt="ABD Solutions Logo">
+  </div>
+
+  <div class="nav-links">
+    <a href="#">Home</a>
+    <a href="#">Services</a>
+    <a href="#">How It Works</a>
+    <a href="#">Contact</a>
+  </div>
+
+  <a href="mailto:hello@abdsolutionsllc.com" class="btn">Get in Touch</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <h1>Offshore Operations Support for Logistics Companies</h1>
+    <p>We handle the backend. You focus on growing your business.</p>
+    <a href="mailto:hello@abdsolutionsllc.com" class="btn" style="align-self:flex-start;">Contact Us</a>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div class="services">
+
+  <div class="card">
+    <img src="loadtracking.png" alt="Load Tracking">
+    <div class="card-content">
+      <h3>Load Tracking</h3>
+      <p>Real-time updates</p>
     </div>
   </div>
 
-  <div class="container">
-
-    <h2>What We Do</h2>
-    <div class="card">
-      <p>We help logistics companies reduce dispatch workload by handling backend operations including:</p>
-      <ul>
-        <li>Load tracking</li>
-        <li>Driver coordination (check calls)</li>
-        <li>ETA updates</li>
-        <li>Documentation management</li>
-      </ul>
+  <div class="card">
+    <img src="driver.png" alt="Driver Coordination">
+    <div class="card-content">
+      <h3>Driver Coordination</h3>
+      <p>Check calls &amp; support</p>
     </div>
-
-    <h2>How It Works</h2>
-    <div class="card">
-      <p>We start with a low-risk pilot where operations are handled directly. Once efficiency is proven, we scale with a structured offshore team.</p>
-    </div>
-
-    <h2>Why ABD Solutions</h2>
-    <div class="card">
-      <p>Process-driven approach, clear communication, and scalable support tailored for logistics businesses.</p>
-    </div>
-
-    <h2>Contact</h2>
-    <div class="card">
-      <p>Email: hello@abdsolutionsllc.com</p>
-    </div>
-
   </div>
+
+  <div class="card">
+    <img src="eta.png" alt="ETA Updates">
+    <div class="card-content">
+      <h3>ETA Updates</h3>
+      <p>Accurate delivery tracking</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="docs.png" alt="Documentation">
+    <div class="card-content">
+      <h3>Documentation</h3>
+      <p>Paperwork handled</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ABOUT -->
+<div class="about">
+  <img src="teamworking.png" alt="Team working">
+  <div class="about-text">
+    <h2>Your Offshore Operations Partner</h2>
+    <p>ABD Solutions helps logistics companies reduce operational workload and scale efficiently through offshore support.</p>
+  </div>
+</div>
+
+<!-- PROCESS -->
+<div class="process">
+  <h2>How It Works</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-number">01</div>
+      <div class="step-title">Discovery</div>
+      <div class="step-desc">We learn about your operations, pain points, and workflow to identify exactly where offshore support will have the biggest impact.</div>
+    </div>
+    <div class="step">
+      <div class="step-number">02</div>
+      <div class="step-title">Pilot</div>
+      <div class="step-desc">We assign 1–2 dedicated employees to your team. Try us out, see the quality of work firsthand, and evaluate the fit — no long-term commitment required.</div>
+    </div>
+    <div class="step">
+      <div class="step-number">03</div>
+      <div class="step-title">Scale</div>
+      <div class="step-desc">Happy with the results? We expand your offshore team to match your growing workload — quickly and without the overhead of traditional hiring.</div>
+    </div>
+    <div class="step">
+      <div class="step-number">04</div>
+      <div class="step-title">Grow</div>
+      <div class="step-desc">With backend operations fully handled, your core team is freed up to focus on winning new business and scaling your company.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  © 2026 ABD Solutions LLC &nbsp;|&nbsp; hello@abdsolutionsllc.com
+</div>
 
 </body>
 </html>
